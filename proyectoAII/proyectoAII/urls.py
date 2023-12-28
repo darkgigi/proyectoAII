@@ -17,8 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from main import views
+from django.conf.urls.static  import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index)
-]
+    path('', views.index),
+    path('populate/', views.populate),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+{% if genres %}
+    <h2>Datos Registrados</h2>
+    <ul>
+        <b>Géneros:</b>
+        <ul>
+            <li>{{ genres }}</li>
+        </ul>
+        <b>Álbumes:</b>
+        <ul>
+            <li>{{ albums }}</li>
+        </ul>
+        <b>Usuarios:</b>
+        <ul>
+            <li>{{ users }}</li>
+        </ul>
+        <b>Puntuaciones:</b>
+        <ul>
+            <li>{{ scores }}</li>
+        </ul>
+    </ul>
+{% endif %}
+
+{% endblock %}
