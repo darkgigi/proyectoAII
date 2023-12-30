@@ -2,6 +2,7 @@ from whoosh import index
 from whoosh.fields import Schema, TEXT, NUMERIC, KEYWORD
 from main.models import Album, Puntuacion
 import whoosh.qparser as qparser
+from whoosh.index import EmptyIndexError
 
 def store_schema():
     album_schema = Schema(id=TEXT(stored=True), name=TEXT(stored=True), genres=KEYWORD(stored=True))
@@ -24,10 +25,21 @@ def store_schema():
 
 
 def search_name(name):
-    ix = index.open_dir("data/album")
-    searcher = ix.searcher()
-    query = qparser.QueryParser("name", ix.schema).parse(str(name))
-    results = searcher.search(query, limit=10)
-    return results
+    try:
+        ix = index.open_dir("data/album")
+        searcher = ix.searcher()
+        query = qparser.QueryParser("name", ix.schema).parse(str(name))
+        results = searcher.search(query)
+        return [result for result in results]
+    except EmptyIndexError:
+        return []
 
-
+def search_genre(genre):
+    try:
+        ix = index.open_dir("data/album")
+        searcher = ix.searcher()
+        query = qparser.QueryParser("genres", ix.schema).parse(str(genre))
+        results = searcher.search(query)
+        return [result for result in results]
+    except EmptyIndexError:
+        return []

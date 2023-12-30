@@ -2,16 +2,21 @@
 
 {% block content %}
 
-    <h2>Introduzca el nombre</h2>
+    <h2>Introduzca el género</h2>
     {% if form.errors %}
         <div class="alert alert-danger" role="alert">
             Este campo es obligatorio
         </div>
     {% endif %}
-    <form action="/search-name/" method="post" class="d-flex align-items-center">
-        {% csrf_token %}
+    <form action="/search-genre/" method="post" class="d-flex align-items-center">
+    {% csrf_token %}
         <div class="form-group mb-2">
-            <input type="text" name="nombre" class="form-control" placeholder="Buscar">
+            <select name="nombre" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                <option selected>Selecciona un género</option>
+                {% for genre in genres %}
+                    <option value="{{ genre.pk }}">{{ genre.nombre }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div class="form-group mx-sm-3 mb-2">
             <button type="submit" class="btn btn-primary">Buscar</button>
