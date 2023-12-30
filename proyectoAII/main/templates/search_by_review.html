@@ -1,0 +1,58 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+    <h2>Buscar reviews</h2>
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            Este campo es obligatorio
+        </div>
+    {% endif %}
+    <form action="/search-review/" method="post" class="d-flex align-items-center">
+        {% csrf_token %}
+        <div class="form-group m-2">
+            <input type="text" name="nombre" class="form-control" placeholder="Introduzca el ID o el nombre del usuario" size="40">
+        </div>
+        <div class="form-group mb-2">
+            <select name="score" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                <option selected value="0">Seleccione una puntuación mínima</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+    {% if results %}
+    <h2>Reviews encontradas:</h2>
+    <div class="row">
+        {% for review in results %}
+            <div class="col-sm-4">
+                <div class="card mb-3" style="height: 400px; overflow-y: auto;">
+                    <div class="card-body">
+                        <h5 class="card-title">Usuario: {{ review.nombreUsuario }}</h5>
+                        <h5>(ID: {{ review.idUsuario }})</h5>
+                        <hr>
+                        <p class="card-text">Puntuación: {{ review.score }}</p>
+                        <p class="card-text">Review: {{ review.review }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        {% if form.is_valid %}
+            <div class="alert alert-danger" role="alert">
+                No se han encontrado resultados
+            </div>
+        {% endif %}
+    {% endif %}
+    
+
+
+
+{% endblock %}

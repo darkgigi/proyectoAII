@@ -6,3 +6,7 @@ class AlbumSearchForm(forms.Form):
 
 class GenreSearchForm(forms.Form):
     nombre = forms.ModelChoiceField(queryset=Genero.objects.all(), empty_label="Seleccione un género")
+
+class ReviewSearchForm(forms.Form):
+    nombre = forms.CharField(max_length=200, required=True, label='Buscar por nombre')
+    score = forms.IntegerField(required=False, label='Buscar por score')

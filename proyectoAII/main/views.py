@@ -2,7 +2,7 @@ from django.shortcuts import render
 from main.populateDB import populateDB
 from main.scraping import *
 from main.whoosh import *
-from main.forms import AlbumSearchForm, GenreSearchForm
+from main.forms import AlbumSearchForm, GenreSearchForm, ReviewSearchForm
 
 def index(request):
     return render(request, 'index.html')
@@ -43,3 +43,19 @@ def search_by_genre(request):
             return render(request, 'search_by_genre.html', context)
     else:
         return render(request, 'search_by_genre.html', context)
+    
+def search_by_review(request):
+    if request.method == 'POST':
+        form = ReviewSearchForm(request.POST)
+        if form.is_valid():
+            text = form.cleaned_data['nombre']
+            score = 0
+            if 'score' in request.POST:
+                score = int(form.cleaned_data['score'])
+            results = search_review(text, score)
+            context = {'results': results, 'form': form}
+            return render(request, 'search_by_review.html', context)
+        else:
+            return render(request, 'search_by_review.html', {'form': form})
+    else:
+        return render(request, 'search_by_review.html')
