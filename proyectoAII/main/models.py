@@ -28,3 +28,4 @@ class Puntuacion(models.Model):
     idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     idAlbum = models.ForeignKey(Album, on_delete=models.CASCADE)
     puntuacion = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    opinion = models.TextField(max_length=1000, blank=True)

@@ -4,17 +4,22 @@ from datetime import datetime
 import json
 import csv
 import re 
-
+from main.scraping import store_new_albums
+from main.whoosh import store_schema
 path = "data"
 
 def populateDB():
+    #En esta función almaceno todos los datos, hago scraping y almaceno para whoosh toda la base de datos
     Genero.objects.all().delete()
     Album.objects.all().delete()
     Usuario.objects.all().delete()
     Puntuacion.objects.all().delete()
     (g,a) = populateGenresAndAlbums()
+    store_new_albums()
     (u, s) = populateUsersAndScores() 
+    store_schema()
     return (g,a,u,s)
+
 
 def genericPopulate(path, model, fields, separator, dateformat=None):
     model.objects.all().delete()
@@ -75,7 +80,8 @@ def populateUsersAndScores():
                     u = Usuario.objects.create(idUsuario=data['reviewerID'], nombre= data['reviewerName'] if 'reviewerName' in data else 'Anonymous')
                 Puntuacion.objects.create(idUsuario=Usuario.objects.get(idUsuario = u.idUsuario), 
                                         idAlbum=album, 
-                                        puntuacion=float(data['overall']))        
+                                        puntuacion=float(data['overall']),
+                                        opinion=data['reviewText'] if 'reviewText' in data else '')        
             except Album.DoesNotExist:
                 pass
     return(Usuario.objects.count(), Puntuacion.objects.count())

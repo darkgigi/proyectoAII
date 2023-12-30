@@ -24,4 +24,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('populate/', views.populate),
+    path('search-name/', views.search_by_name),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

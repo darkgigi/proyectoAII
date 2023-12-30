@@ -6,3 +6,6 @@ __pycache__/
 
 db.sqlite3
 db.sqlite3-journal
+
+proyectoAII/data/album/*
+proyectoAII/data/review/*
