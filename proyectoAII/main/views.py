@@ -74,6 +74,7 @@ def store_rs(request):
         Prefs[user][itemid] = score
     shelf['Prefs']=Prefs
     shelf['ItemsPrefs']=transformPrefs(Prefs)
+    shelf['SimItems']=calculateSimilarItems(Prefs, n=10)
     shelf.close()
 
     return render(request, 'index.html')
@@ -106,3 +107,33 @@ def fcu(request):
             return render(request, 'fcu.html', {'form': form})
     else:
         return render(request, 'fcu.html')
+
+def fci(request):
+    user = None
+    if request.method == 'POST':
+        form = UserSearchForm(request.POST)
+        if form.is_valid():
+            idUser = form.cleaned_data['usuario']
+            try:
+                user = Usuario.objects.get(pk=idUser)
+            except:
+                return render(request, 'fci.html', {'badid': True})
+            shelf = shelve.open("data/RS/dataRS.dat")
+            Prefs = shelf['Prefs']
+            SimItems = shelf['SimItems']
+            shelf.close()
+            rankings = getRecommendedItems(Prefs,SimItems, idUser)
+            recommendations = rankings[:5]
+            albums = []
+            scores = []
+            for recommendation in recommendations:
+                albums.append(Album.objects.get(pk=recommendation[1]))
+                scores.append(recommendation[0])
+            if len(albums) == 0:
+                return render(request, 'fci.html', {'noresults': True})
+            context = {'form': form, 'albums': list(zip(albums, scores)), 'album': user}
+            return render(request, 'fci.html', context)
+        else:
+            return render(request, 'fci.html', {'form': form})
+    else:
+        return render(request, 'fci.html')
