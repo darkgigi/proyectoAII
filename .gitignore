@@ -9,3 +9,5 @@ db.sqlite3-journal
 
 proyectoAII/data/album/*
 proyectoAII/data/review/*
+
+proyectoAII/data/RS/*

@@ -2,7 +2,9 @@ from django.shortcuts import render
 from main.populateDB import populateDB
 from main.scraping import *
 from main.whoosh import *
-from main.forms import AlbumSearchForm, GenreSearchForm, ReviewSearchForm
+from main.forms import AlbumSearchForm, GenreSearchForm, ReviewSearchForm, UserSearchForm
+from main.recommendations import *
+import shelve
 
 def index(request):
     return render(request, 'index.html')
@@ -59,3 +61,48 @@ def search_by_review(request):
             return render(request, 'search_by_review.html', {'form': form})
     else:
         return render(request, 'search_by_review.html')
+    
+def store_rs(request):
+    Prefs={}   
+    shelf = shelve.open("data/RS/dataRS.dat")
+    reviews = Puntuacion.objects.all()
+    for review in reviews:
+        user = review.idUsuario.idUsuario
+        itemid = review.idAlbum.idAlbum
+        score = review.puntuacion
+        Prefs.setdefault(user, {})
+        Prefs[user][itemid] = score
+    shelf['Prefs']=Prefs
+    shelf['ItemsPrefs']=transformPrefs(Prefs)
+    shelf.close()
+
+    return render(request, 'index.html')
+
+def fcu(request):
+    user = None
+    if request.method == 'POST':
+        form = UserSearchForm(request.POST)
+        if form.is_valid():
+            idUser = form.cleaned_data['usuario']
+            try:
+                user = Usuario.objects.get(pk=idUser)
+            except:
+                return render(request, 'fcu.html', {'badid': True})
+            shelf = shelve.open("data/RS/dataRS.dat")
+            Prefs = shelf['Prefs']
+            shelf.close()
+            rankings = getRecommendations(Prefs, idUser)
+            recommendations = rankings[:5]
+            albums = []
+            scores = []
+            for recommendation in recommendations:
+                albums.append(Album.objects.get(pk=recommendation[1]))
+                scores.append(recommendation[0])
+            if len(albums) == 0:
+                return render(request, 'fcu.html', {'noresults': True})
+            context = {'form': form, 'albums': list(zip(albums, scores)), 'user': user}
+            return render(request, 'fcu.html', context)
+        else:
+            return render(request, 'fcu.html', {'form': form})
+    else:
+        return render(request, 'fcu.html')

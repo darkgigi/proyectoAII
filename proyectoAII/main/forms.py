@@ -10,3 +10,6 @@ class GenreSearchForm(forms.Form):
 class ReviewSearchForm(forms.Form):
     nombre = forms.CharField(max_length=200, required=True, label='Buscar por nombre')
     score = forms.IntegerField(required=False, label='Buscar por score')
+
+class UserSearchForm(forms.Form):
+    usuario = forms.CharField(max_length=200, required=True, label='Buscar por nombre')

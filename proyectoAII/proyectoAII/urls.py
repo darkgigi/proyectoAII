@@ -27,4 +27,6 @@ urlpatterns = [
     path('search-name/', views.search_by_name),
     path('search-genre/', views.search_by_genre),
     path('search-review/', views.search_by_review),
+    path('store-rs/', views.store_rs),
+    path('fcu/', views.fcu),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
