@@ -30,4 +30,5 @@ urlpatterns = [
     path('store-rs/', views.store_rs),
     path('fcu/', views.fcu),
     path('fci/', views.fci),
+    path('search-all/', views.search_all_albums),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

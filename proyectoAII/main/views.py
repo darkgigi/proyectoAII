@@ -5,6 +5,7 @@ from main.whoosh import *
 from main.forms import AlbumSearchForm, GenreSearchForm, ReviewSearchForm, UserSearchForm
 from main.recommendations import *
 import shelve
+from django.core.paginator import Paginator
 
 def index(request):
     return render(request, 'index.html')
@@ -61,7 +62,15 @@ def search_by_review(request):
             return render(request, 'search_by_review.html', {'form': form})
     else:
         return render(request, 'search_by_review.html')
-    
+
+def search_all_albums(request):
+    albums = Album.objects.all().order_by('nombre')
+    paginator = Paginator(albums, 100)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {'page_obj': page_obj}
+    return render(request, 'search_all_albums.html', context)
+
 def store_rs(request):
     Prefs={}   
     shelf = shelve.open("data/RS/dataRS.dat")

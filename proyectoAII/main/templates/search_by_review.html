@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h2>Buscar reviews</h2>
+    <h2>Buscar reseñas</h2>
     {% if form.errors %}
         <div class="alert alert-danger" role="alert">
             Este campo es obligatorio
@@ -32,8 +32,8 @@
     <div class="row">
         {% for review in results %}
             <div class="col-sm-4">
-                <div class="card mb-3" style="height: 400px; overflow-y: auto;">
-                    <div class="card-body">
+                <div class="card mb-3" style="height: 400px;">
+                    <div class="card-body overflow-auto">
                         <h5 class="card-title">Usuario: {{ review.nombreUsuario }}</h5>
                         <h5>(ID: {{ review.idUsuario }})</h5>
                         <hr>
