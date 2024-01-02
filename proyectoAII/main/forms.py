@@ -13,3 +13,6 @@ class ReviewSearchForm(forms.Form):
 
 class UserSearchForm(forms.Form):
     usuario = forms.CharField(max_length=200, required=True, label='Buscar por nombre')
+
+class AlbumIDSearchForm(forms.Form):
+    id = forms.CharField(max_length=10, required=True, label='Buscar por ID')

@@ -43,4 +43,9 @@ def store_new_albums():
         
 
 def gen_random_id():
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(9))
+    id= ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(9))
+    try:
+        Album.objects.get(idAlbum=id)
+    except:
+        id = gen_random_id()
+    return id

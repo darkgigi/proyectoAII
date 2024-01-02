@@ -2,7 +2,7 @@ from django.shortcuts import render
 from main.populateDB import populateDB
 from main.scraping import *
 from main.whoosh import *
-from main.forms import AlbumSearchForm, GenreSearchForm, ReviewSearchForm, UserSearchForm
+from main.forms import AlbumSearchForm, GenreSearchForm, ReviewSearchForm, UserSearchForm, AlbumIDSearchForm
 from main.recommendations import *
 import shelve
 from django.core.paginator import Paginator
@@ -110,7 +110,7 @@ def fcu(request):
                 scores.append(recommendation[0])
             if len(albums) == 0:
                 return render(request, 'fcu.html', {'noresults': True})
-            context = {'form': form, 'albums': list(zip(albums, scores)), 'user': user}
+            context = {'form': form, 'albums': list(zip(albums, scores))}
             return render(request, 'fcu.html', context)
         else:
             return render(request, 'fcu.html', {'form': form})
@@ -140,9 +140,38 @@ def fci(request):
                 scores.append(recommendation[0])
             if len(albums) == 0:
                 return render(request, 'fci.html', {'noresults': True})
-            context = {'form': form, 'albums': list(zip(albums, scores)), 'album': user}
+            context = {'form': form, 'albums': list(zip(albums, scores))}
             return render(request, 'fci.html', context)
         else:
             return render(request, 'fci.html', {'form': form})
     else:
         return render(request, 'fci.html')
+
+def similar_albums(request):
+    if request.method == 'POST':
+        form = AlbumIDSearchForm(request.POST)
+        if form.is_valid():
+            idAlbum = form.cleaned_data['id']
+            try:
+                album = Album.objects.get(pk=idAlbum)
+            except:
+                return render(request, 'similar_albums.html', {'badid': True})
+            shelf = shelve.open("data/RS/dataRS.dat")
+            ItemsPrefs = shelf['ItemsPrefs']
+            shelf.close()
+            if not idAlbum in ItemsPrefs:
+                return render(request, 'similar_albums.html', {'noresults': True})
+            similars = topMatches(ItemsPrefs, idAlbum, n=3)
+            albums = []
+            similarity = []
+            for recommendation in similars:
+                albums.append(Album.objects.get(pk=recommendation[1]))
+                similarity.append(recommendation[0])
+            if len(albums) == 0:
+                return render(request, 'similar_albums.html', {'noresults': True})
+            context = {'form': form, 'albums': list(zip(albums, similarity)), 'album': album}
+            return render(request, 'similar_albums.html', context)
+        else:
+            return render(request, 'similar_albums.html', {'form': form})
+    else:
+        return render(request, 'similar_albums.html')
