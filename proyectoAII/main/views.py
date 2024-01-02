@@ -12,7 +12,8 @@ def index(request):
 
 def populate(request):
     if request.method == 'POST':
-        genres,albums,users,scores = populateDB()
+        complete = 'complete' in request.POST
+        genres,albums,users,scores = populateDB(complete)
         context = {'genres': genres, 'albums':albums, 'users': users, 'scores': scores}
         return render(request, 'populate.html', context)
     else:

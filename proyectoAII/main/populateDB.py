@@ -8,7 +8,7 @@ from main.scraping import store_new_albums
 from main.whoosh import store_schema
 path = "data"
 
-def populateDB():
+def populateDB(complete = False):
     #En esta función almaceno todos los datos, hago scraping y almaceno para whoosh toda la base de datos
     Genero.objects.all().delete()
     Album.objects.all().delete()
@@ -16,7 +16,7 @@ def populateDB():
     Puntuacion.objects.all().delete()
     (g,a) = populateGenresAndAlbums()
     store_new_albums()
-    (u, s) = populateUsersAndScores() 
+    (u, s) = populateUsersAndScores(complete) 
     store_schema()
     return (g,a,u,s)
 
@@ -64,9 +64,9 @@ def populateGenresAndAlbums():
     
     return (Genero.objects.count(), Album.objects.count())
 
-def populateUsersAndScores():
-
-    with open('data/Digital_Music_5.json', 'r') as fileobj:
+def populateUsersAndScores(complete=False):
+    file = 'data/Digital_Music_5.json' if not complete else 'data/Digital_Music_5_complete.json'
+    with open(file, 'r') as fileobj:
         for line in fileobj.readlines():
             data = json.loads(line)
             try:
