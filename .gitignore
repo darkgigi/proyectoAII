@@ -11,3 +11,6 @@ proyectoAII/data/album/*
 proyectoAII/data/review/*
 
 proyectoAII/data/RS/*
+
+*.docx
+*.pdf

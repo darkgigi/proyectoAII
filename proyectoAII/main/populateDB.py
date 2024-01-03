@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 import csv
 import re 
-from main.scraping import store_new_albums
+from main.scraping import store_new_albums_and_reviews
 from main.whoosh import store_schema
 path = "data"
 
@@ -15,8 +15,8 @@ def populateDB(complete = False):
     Usuario.objects.all().delete()
     Puntuacion.objects.all().delete()
     (g,a) = populateGenresAndAlbums()
-    store_new_albums()
     (u, s) = populateUsersAndScores(complete) 
+    store_new_albums_and_reviews()
     store_schema()
     return (g,a,u,s)
 
