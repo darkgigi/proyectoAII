@@ -29,6 +29,8 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">{{ album.name }}</h5>
+                        <h6 class="card-subtitle text-muted">{{ album.id }}</h6>
+                        <hr>
                         {% if album.genres %}
                             <p class="card-text">Géneros: {{ album.genres }}</p>
                         {% endif %}
