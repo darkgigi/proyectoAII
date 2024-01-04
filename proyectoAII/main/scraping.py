@@ -52,7 +52,8 @@ def store_new_albums_and_reviews():
             score = float(rate)
             username = review.find('div',class_="userReviewName").find('span').getText()
             normalized_score = normalize_score(score)
-            text = review.find('div', class_='albumReviewText').find('p').getText()
+            text_elements = review.find('div', class_='albumReviewText').find_all('p')
+            text = ' '.join(p.getText() for p in text_elements)
             try:
                 user = Usuario.objects.get(nombre=username)
             except Usuario.DoesNotExist:

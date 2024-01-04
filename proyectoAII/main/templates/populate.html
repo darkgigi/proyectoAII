@@ -24,8 +24,9 @@
     </ul>
     {% else %}
     <h3 style="text-align: center;"><b>¿Quiere realizar la carga de datos?</b> El proceso puede tardar varios minutos. Además, puede 
-    elegir si realizar una carga completa de los datos de las reseñas y usuario o una carga parcial. <b>Nota: la carga completa tardará
-    el doble de tiempo</b></h2>
+    elegir si realizar una carga completa de los datos de las reseñas y usuario o una carga parcial. <b>Nota: la carga completa cargará
+        el doble de datos de reseñas
+    </b></h2>
     <div class="buttons" style="display: flex; justify-content: center; gap: 20px;" >
         <form action="/populate/" method="post" style="display: flex; gap: 20px;">
             {% csrf_token %}
