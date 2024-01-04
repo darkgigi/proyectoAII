@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h2>Recomendar álbums a un usuario</h1>
+    <h2>Recomendar álbumes a un usuario</h1>
     <h5>Introduzca el ID de un usuario para recomendar álbumes usando filtrado colaborativo basado en items</p>
     {% if form.errors %}
         <div class="alert alert-danger" role="alert">
@@ -27,7 +27,7 @@
 {% if albums %}
         <BR><BR>
         <fieldset>
-            <legend>Álbumes similares</legend>
+            <legend>Álbumes recomendados</legend>
             <table>
                 <tr>
                     <th>Nombre</th>
