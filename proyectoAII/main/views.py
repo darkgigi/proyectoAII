@@ -102,7 +102,10 @@ def fcu(request):
             shelf = shelve.open("data/RS/dataRS.dat")
             Prefs = shelf['Prefs']
             shelf.close()
-            rankings = getRecommendations(Prefs, idUser)
+            try:
+                rankings = getRecommendations(Prefs, idUser)
+            except:
+                return render(request, 'fcu.html', {'noresults': True})
             recommendations = rankings[:5]
             albums = []
             scores = []
@@ -132,7 +135,10 @@ def fci(request):
             Prefs = shelf['Prefs']
             SimItems = shelf['SimItems']
             shelf.close()
-            rankings = getRecommendedItems(Prefs,SimItems, idUser)
+            try:
+                rankings = getRecommendedItems(Prefs,SimItems, idUser)
+            except:
+                return render(request, 'fci.html', {'noresults': True})
             recommendations = rankings[:5]
             albums = []
             scores = []
@@ -162,7 +168,10 @@ def similar_albums(request):
             shelf.close()
             if not idAlbum in ItemsPrefs:
                 return render(request, 'similar_albums.html', {'noresults': True})
-            similars = topMatches(ItemsPrefs, idAlbum, n=3)
+            try:
+                similars = topMatches(ItemsPrefs, idAlbum, n=3)
+            except:
+                return render(request, 'similar_albums.html', {'noresults': True})
             albums = []
             similarity = []
             for recommendation in similars:
